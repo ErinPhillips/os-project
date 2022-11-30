@@ -1,6 +1,6 @@
 // utils.h
 
-int cacheBlockSize();
+int cacheBlockSize(int n);
 
 int cacheSize();
 

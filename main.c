@@ -1,23 +1,26 @@
 // main.c
+#include <stdio.h>
+#include "utils.h"
+
 
 int main(int argc, char** argv)
-{
-    int numTimesToAccess = 1000;
+ {
+  int numTimesToAccess = 1000;
 
 	printf("Calculating time to access main memory...\n");
-	float mainTime = getAvgTimeMain(numTimesToAccess);
+	float mainTime = mainTimeAvg(numTimesToAccess);
 	printf("Complete!\n");
-	
+
 	printf("Calculating time to access cache...\n");
-	float cacheTime = getAvgTimeCache(numTimesToAccess);
+	float cacheTime = cacheTimeAvg(numTimesToAccess);
 	printf("Complete!\n");
-	
+
 	printf("Calculating cache size...\n");
-	int cacheSize = getCacheSize();
+	int cache_size = cacheSize();
 	printf("Complete!\n\n");
-	
+
 	printf("Calculating cache block size...\n");
-	int cacheBlockSize = getCacheBlockSize(1);
+	int cache_block_size = cacheBlockSize(1);
 	printf("Complete!\n\n");
 
 
@@ -25,7 +28,7 @@ int main(int argc, char** argv)
 
 	printf("Average time to access main memory is %f seconds\n", mainTime);
 	printf("Average time to access cache is %f seconds\n", cacheTime);
-	printf("Cache Size is: %d KB\n", cacheSize);
-	printf("Cache Block Size is: %d bytes\n\n", cacheBlockSize);
+	printf("Cache Size is: %d KB\n", cache_size);
+	printf("Cache Block Size is: %d bytes\n\n", cache_block_size);
 
 }
