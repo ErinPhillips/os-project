@@ -1,9 +1,9 @@
-// util.h
+// utils.h
 
-int cache_block_size();
+int cacheBlockSize();
 
-int cache_size();
+int cacheSize();
 
-int main_mem_access_time();
+float mainTimeAvg(int n);
 
-int cache_mem_access_time();
+float cacheTimeAvg(int n);
