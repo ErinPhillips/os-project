@@ -1,6 +1,6 @@
-# Final Project - CSCI 340
-## Erin Phillips and Brandon Beck
-## Cache and Main Memory
+### Final Project - CSCI 340
+### Erin Phillips and Brandon Beck
+### Cache and Main Memory
 #
 ### What is the size of a cache block?
 We know that the size of the cache block is 256 bytes. We were unable to obtain this result with our expirements. The program is able to utilize cache efficiently until it requires a new block. We attempted to record the times by comparing random accesses to an array but could not get the functionality to execute in a desired way. Our asumption is that the time taking to access cache memory slows when it nears requiring a new block - this was difficult to prove with our program. 
