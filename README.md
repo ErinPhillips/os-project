@@ -1,4 +1,4 @@
-## Final Project - CSCI 340
+# Final Project - CSCI 340
 ## Erin Phillips and Brandon Beck
 ## Cache and Main Memory
 #
