@@ -7,7 +7,18 @@
 
 int blockSize = 32;
 
+
+double getAvg(int *arr, int size) {
+  int sum = 0;
+  for (int i = 0; i < size; i++) {
+    sum += arr[i];
+  }
+  return sum/size;
+}
+//TODO
 int cacheBlockSize(int n) {
+
+  // size of cache block is size of the cache in bytes divided by the size of a block in bytes.
 
     for (int i = 1; i < 256; i = i * 2) {
 
@@ -15,6 +26,7 @@ int cacheBlockSize(int n) {
 
         // get both times to compare
         float cacheTime = cacheTimeAvg(n);
+        float mainTime = mainTimeAvg(n)
 
         if (cacheTime < 0.0001) {
             return i;
@@ -25,7 +37,7 @@ int cacheBlockSize(int n) {
 return 0;
 
 }
-
+//TODO
 int cacheSize() {
 
   struct timespec start, stop;
@@ -36,10 +48,10 @@ int cacheSize() {
 	int MAX_CACHE = 65536;
 
  	for (i = 1; i <= MAX_CACHE; i = i*2) {
- 		arr = malloc(sizeof(int) * (1024 * 1024));
+ 		arr = malloc(sizeof(int) * MB);
  		clock_gettime(CLOCK_MONOTONIC, &start);
 
- 		for (int j = 0; j < (i * 1024 * 1024); j++){
+ 		for (int j = 0; j < (i * MB); j++){
  			arr[0]++;
  		}
 
@@ -58,74 +70,83 @@ int cacheSize() {
 }
 
 float mainTimeAvg(int n) {
-	struct timespec ts_begin, ts_end;
-	double elapsed1;
-	double totalElapsed = 0;
 
-	int z = 0;
+  int *ptr;
+	struct timespec start, stop;
+	double elapsed;
+  double mainTimes[TRIALS];
 
-	for (int i = 0; i < n; i++){
 
-		int arr[1024*1024];// * (1024 * 1024)); // turn size of int (bytes) to size of int (kilobyte) smaller number to larger number
+  for(int i = 0; i < TRIALS; i++){
+		ptr = (int *) malloc((n)*sizeof(int));
 
-		int arrSize = 1024 * 1024;// * (1024 * 1024);
-
-		//populate array
-		for (int x = 0; x < arrSize; x++){
-			arr[x] = x;
+		for(int j = 0; j < n; j++){
+			ptr[j] = rand()%10000;
 		}
 
-		//for main memory
-		clock_gettime(CLOCK_MONOTONIC, &ts_begin);
-		for (int j = 0; j < arrSize; j = j + blockSize){
-			z += arr[j];
+		clock_gettime(CLOCK_MONOTONIC, &start);
+		for(int k = 0; k < n; k++){
+			ptr[k] += 1;
+			}
+
+		clock_gettime(CLOCK_MONOTONIC, &stop);
+		free(ptr);
+
+		elapsed = ( stop.tv_sec - start.tv_sec )
+				+ ( stop.tv_nsec - start.tv_nsec);
+
+		mainTimes[i] = elapsed;
 		}
-		clock_gettime(CLOCK_MONOTONIC, &ts_end);
-
-		elapsed1 = ts_end.tv_sec - ts_begin.tv_sec;
-		elapsed1 += ((ts_end.tv_nsec - ts_begin.tv_nsec)/1000000000.0);
-		totalElapsed = totalElapsed + elapsed1;
-
 	}
-	printf("IGNORE %d\n", z);
-	return(totalElapsed/n); // returning the average time for all results
+  double mainAvg = getAvg(mainTimes, TRIALS);
+	return(mainAvg); // returning the average time for all results
 
 }
 
 float cacheTimeAvg(int n) {
 
-	struct timespec ts_begin, ts_end;
-	double elapsed1;
-	double totalElapsed = 0;
+  int *ptr;
+	struct timespec start, stop;
+  int testArr[SIZE][SIZE];
+  double cacheTimes[TRIALS]
+	double elapsed;
 
-	int z = 0;
+  for(int t = 0; t < TRIALS; t++){
+  ptr = (int *) malloc((n)*sizeof(int));
 
-
-	for (int i = 0; i < n; i++){
-
-		int arr[1024*1024];// * (1024 * 1024)); // turn size of int (bytes) to size of int (kilobyte) smaller number to larger number
-
-		int arrSize = 1024 * 1024;// * (1024 * 1024);
-
-		//populate array
-		for (int x = 0; x < arrSize; x++){
-			arr[x] = x+1;
-		}
-
-		// only check the same amount of time that we did for main memory
-		arrSize = arrSize/blockSize;
-
-		//for cache memory
-		clock_gettime(CLOCK_MONOTONIC, &ts_begin);
-		for (int j = 0; j < arrSize; j++){
-			z += arr[0];
-		}
-		clock_gettime(CLOCK_MONOTONIC, &ts_end);
-
-
-		elapsed1 = ts_end.tv_sec - ts_begin.tv_sec;
-		elapsed1 += ((ts_end.tv_nsec - ts_begin.tv_nsec)/1000000000.0);
-		totalElapsed = totalElapsed + elapsed1;
-
+    for(int i = 0; i < n; i++){
+      ptr[i] = rand()%1000;
     }
+
+    for(int j = 0; j < 1000; j++){
+      for(int k = 0; k < 1000; k++){
+        testArr[j][k] = rand()%1000;
+      }
+  }
+  int sum = 0;
+
+  clock_gettime(CLOCK_MONOTONIC, &start);
+
+  for(int i = 0; i < n; i++){
+
+    int row = rand()%1000;
+    int col = rand()%1000;
+
+    sum += testArr[row][col]; //attempting to flood cache
+    ptr[row] += 1;
+  }
+  clock_gettime(CLOCK_MONOTONIC, &stop);
+
+  free(ptr);
+
+  elapsed = ( stop.tv_sec - start.tv_sec )
+      + ( stop.tv_nsec - start.tv_nsec);
+
+  cacheTimes[t] = elapsed;
+  }
+}
+
+double cacheAvg = getAvg(cacheTimes, TRIALS);
+return(cacheAvg);
+ }
 }
