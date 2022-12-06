@@ -1,11 +1,12 @@
 // utils.h
 
-#define TRIALS 1000;
-#define SIZE 1000;
+#define TRIALS 1000
+#define SIZE 1000
+
+double getAvg(double *arr, int size);
 
 int cacheBlockSize(int n);
 
-int cacheSize();
 
 float mainTimeAvg(int n);
 

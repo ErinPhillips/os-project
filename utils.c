@@ -5,76 +5,38 @@
 #include <time.h>
 #include "utils.h"
 
-int blockSize = 32;
 
-
-double getAvg(int *arr, int size) {
+double getAvg(double *arr, int size) {
   int sum = 0;
   for (int i = 0; i < size; i++) {
     sum += arr[i];
   }
   return sum/size;
 }
-//TODO
-int cacheBlockSize(int n) {
 
-  // size of cache block is size of the cache in bytes divided by the size of a block in bytes.
+/*int cacheBlockSize(int n) {
 
-    for (int i = 1; i < 256; i = i * 2) {
+     for (int i = 1; i < 256; i = i * 2) {
+   
+         float cacheTime = cacheTimeAvg(n);
 
-        blockSize = i;
+         if (cacheTime < 0.0001) {
+             return i;
+             break;
+         }
+     }
 
-        // get both times to compare
-        float cacheTime = cacheTimeAvg(n);
-        float mainTime = mainTimeAvg(n)
-
-        if (cacheTime < 0.0001) {
-            return i;
-            break;
-        }
-    }
-
-return 0;
+ return 0;
 
 }
-//TODO
-int cacheSize() {
-
-  struct timespec start, stop;
- 	double accum;
- 	int *arr;
-  int i;
-
-	int MAX_CACHE = 65536;
-
- 	for (i = 1; i <= MAX_CACHE; i = i*2) {
- 		arr = malloc(sizeof(int) * MB);
- 		clock_gettime(CLOCK_MONOTONIC, &start);
-
- 		for (int j = 0; j < (i * MB); j++){
- 			arr[0]++;
- 		}
-
- 		clock_gettime(CLOCK_MONOTONIC, &stop);
-
- 		accum = ( stop.tv_sec - start.tv_sec )
-          + ( stop.tv_nsec - start.tv_nsec);
-
-
- 		if (accum < 1000.0 && accum > 0.0){
- 			break;
- 		}
- 	}
- 	return i;
-
-}
+*/
 
 float mainTimeAvg(int n) {
 
-  int *ptr;
+ 	int *ptr;
 	struct timespec start, stop;
 	double elapsed;
-  double mainTimes[TRIALS];
+ 	double mainTimes[TRIALS];
 
 
   for(int i = 0; i < TRIALS; i++){
@@ -97,7 +59,7 @@ float mainTimeAvg(int n) {
 
 		mainTimes[i] = elapsed;
 		}
-	}
+		
   double mainAvg = getAvg(mainTimes, TRIALS);
 	return(mainAvg); // returning the average time for all results
 
@@ -108,7 +70,7 @@ float cacheTimeAvg(int n) {
   int *ptr;
 	struct timespec start, stop;
   int testArr[SIZE][SIZE];
-  double cacheTimes[TRIALS]
+  double cacheTimes[TRIALS];
 	double elapsed;
 
   for(int t = 0; t < TRIALS; t++){
@@ -144,9 +106,8 @@ float cacheTimeAvg(int n) {
 
   cacheTimes[t] = elapsed;
   }
-}
 
 double cacheAvg = getAvg(cacheTimes, TRIALS);
 return(cacheAvg);
  }
-}
+
