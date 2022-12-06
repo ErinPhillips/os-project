@@ -14,6 +14,17 @@ double getAvg(double *arr, int size) {
   return sum/size;
 }
 
+double min(double arr[], int arrLen){
+	int i;
+	double min = 1.000;
+	for(i = 0; i<arrLen;i++){
+		if(min>arr[i]){
+			min = arr[i];
+		}
+	}
+	return min;
+}
+
 
 float mainTimeAvg(int n) {
 
@@ -37,11 +48,12 @@ float mainTimeAvg(int n) {
 		clock_gettime(CLOCK_MONOTONIC, &stop);
 		free(ptr);
 
-		elapsed = ( stop.tv_sec - start.tv_sec )
-				+ ( stop.tv_nsec - start.tv_nsec);
+		elapsed = ( stop.tv_sec - start.tv_sec );
+		elapsed += ((stop.tv_nsec - start.tv_nsec)/10.0);
 
 		mainTimes[i] = elapsed;
 	}
+		printf("Minimum time to access main memory: %f\n", min(mainTimes, TRIALS));
 		
 		double mainAvg = getAvg(mainTimes, TRIALS);
 		return(mainAvg); // returning the average time for all results
@@ -83,11 +95,13 @@ float cacheTimeAvg(int n) {
 
 	  	free(ptr);
 
-	  	elapsed = ( stop.tv_sec - start.tv_sec ) + ( stop.tv_nsec - start.tv_nsec);
+	  	elapsed = ( stop.tv_sec - start.tv_sec );
+		elapsed += ((stop.tv_nsec - start.tv_nsec)/10.0);
 
 	  	cacheTimes[t] = elapsed;
  	}
-
+	
+	printf("Minimum time to access main memory: %f\n", min(cacheTimes, TRIALS));
 	double cacheAvg = getAvg(cacheTimes, TRIALS);
 	return(cacheAvg);
  }
